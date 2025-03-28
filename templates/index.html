@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crop & Fertilizer Prediction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        h1, h2 {
+            color: #333;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        .input-container {
+            display: flex;
+            width: 100%;
+        }
+
+        .input-container label, 
+        .input-container input,
+        .input-container select {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            background: green;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background: darkgreen;
+        }
+
+        .result {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            margin-top: 10px;
+        }
+
+        .info-box {
+            background: #e6f7ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 10px;
+            font-size: 14px;
+            text-align: justify;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Crop & Fertilizer Prediction</h1>
+
+    <div class="container">
+        <h2>Crop Recommendation</h2>
+        <p><b>Model Used:</b> Logistic Regression</p>
+        <p><b>Accuracy:</b> 93%</p>
+
+        <div class="form-group">
+            <div class="input-container">
+                <label for="N">Nitrogen (N)</label>
+                <input type="number" id="N">
+            </div>
+
+            <div class="input-container">
+                <label for="P">Phosphorus (P)</label>
+                <input type="number" id="P">
+            </div>
+
+            <div class="input-container">
+                <label for="K">Potassium (K)</label>
+                <input type="number" id="K">
+            </div>
+
+            <div class="input-container">
+                <label for="temperature">Temperature (°C)</label>
+                <input type="number" id="temperature">
+            </div>
+
+            <div class="input-container">
+                <label for="humidity">Humidity (%)</label>
+                <input type="number" id="humidity">
+            </div>
+
+            <div class="input-container">
+                <label for="ph">pH Level</label>
+                <input type="number" id="ph">
+            </div>
+
+            <div class="input-container">
+                <label for="rainfall">Rainfall (mm)</label>
+                <input type="number" id="rainfall">
+            </div>
+
+            <button onclick="predictCrop()">Predict Crop</button>
+        </div>
+
+        <p class="result" id="cropResult"></p>
+    </div>
+
+    <div class="container">
+        <h2>Fertilizer Prediction</h2>
+        <p><b>Model Used:</b> Random Forest Classifier</p>
+        <p><b>Accuracy:</b> 95%</p>
+    
+        <div class="form-group">
+            <div class="input-container">
+                <label for="CropType">Crop Type</label>
+                <select id="CropType">
+                    <option value="">Select Crop Type</option>
+                    <option value="maize">Maize</option>
+                    <option value="rice">Rice</option>
+                    <option value="chickpea">Chickpea</option>
+                    <option value="Kidneybeans">Kidneybeans</option>
+                    <option value="Pigeonpeas">Pigeonpeas</option>
+                    <option value="Mothbeans">Mothbeans</option>
+                    <option value="Mungbean">Mungbean</option>
+                    <option value="Blackgram">Blackgram</option>
+                    <option value="Lentil">Lentil</option>
+                    <option value="Pomegranate">Pomegranate</option>
+                    <option value="Banana">Banana</option>
+                    <option value="Mango">Mango</option>
+                    <option value="Grapes">Grapes</option>
+                    <option value="Watermelon">Watermelon</option>
+                    <option value="Muskmelon">Muskmelon</option>
+                    <option value="Apple">Apple</option>
+                    <option value="Orange">Orange</option>
+                    <option value="Papaya">Papaya</option>
+                    <option value="Coconut">Coconut</option>
+                    <option value="Cotton">Cotton</option>
+                    <option value="Jute">Jute</option>
+                    <option value="Coffee">Coffee</option>
+                </select>
+            </div>
+    
+            <div class="input-container">
+                <label for="SoilType">Soil Type</label>
+                <select id="SoilType">
+                    <option value="">Select Soil Type</option>
+                    <option value="Sandy">Sandy</option>
+                    <option value="Loamy">Loamy</option>
+                    <option value="Black">Black</option>
+                    <option value="Red">Red</option>
+                    <option value="Clayey">Clayey</option>
+                </select>
+            </div>
+    
+            <div class="input-container">
+                <label for="temperature">Temperature (°C)</label>
+                <input type="number" id="temperature" step="0.01">
+            </div>
+    
+            <div class="input-container">
+                <label for="humidity">Humidity (%)</label>
+                <input type="number" id="humidity" step="0.01">
+            </div>
+    
+            <div class="input-container">
+                <label for="moisture">Moisture (%)</label>
+                <input type="number" id="moisture" step="0.01">
+            </div>
+    
+            <div class="input-container">
+                <label for="nitrogen">Nitrogen (N)</label>
+                <input type="number" id="nitrogen">
+            </div>
+    
+            <div class="input-container">
+                <label for="potassium">Potassium (K)</label>
+                <input type="number" id="potassium">
+            </div>
+    
+            <div class="input-container">
+                <label for="phosphorous">Phosphorous (P)</label>
+                <input type="number" id="phosphorous">
+            </div>
+    
+            <button onclick="predictFertilizer()">Predict Fertilizer</button>
+        </div>
+    
+        <p class="result" id="fertilizerResult"></p>
+    </div>
+    
+    <div class="container">
+        <h2>Previous Predictions</h2>
+        <button onclick="fetchPredictions()">Load Predictions</button>
+        <ul id="predictionList"></ul>
+    </div>
+
+    <script>
+        async function predictCrop() {
+            const data = {
+                N: document.getElementById("N").value,
+                P: document.getElementById("P").value,
+                K: document.getElementById("K").value,
+                temperature: document.getElementById("temperature").value,
+                humidity: document.getElementById("humidity").value,
+                ph: document.getElementById("ph").value,
+                rainfall: document.getElementById("rainfall").value
+            };
+
+            const response = await fetch("/predict_crop", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data)
+            });
+
+            const result = await response.json();
+            document.getElementById("cropResult").innerText = "Recommended Crop: " + result.recommended_crop;
+        }
+
+        async function predictFertilizer() {
+        const data = {
+            CropType: document.getElementById("CropType").value,
+            SoilType: document.getElementById("SoilType").value,
+            Temperature: parseFloat(document.getElementById("temperature").value),
+            Humidity: parseFloat(document.getElementById("humidity").value),
+            Moisture: parseFloat(document.getElementById("moisture").value),
+            Nitrogen: parseInt(document.getElementById("nitrogen").value),
+            Potassium: parseInt(document.getElementById("potassium").value),
+            Phosphorous: parseInt(document.getElementById("phosphorous").value),
+        };
+
+        try {
+            const response = await fetch("/predict_fertilizer", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data),
+            });
+
+            const result = await response.json();
+
+            if (result.recommended_fertilizer) {
+                document.getElementById("fertilizerResult").innerText =
+                    "Recommended Fertilizer: " + result.recommended_fertilizer;
+            } else {
+                document.getElementById("fertilizerResult").innerText =
+                    "Error: " + (result.error || "Could not get a recommendation.");
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            document.getElementById("fertilizerResult").innerText = "Error fetching prediction.";
+        }
+    }
+    async function fetchPredictions() {
+    const response = await fetch("/get_predictions");
+    const data = await response.json();
+
+    const predictionList = document.getElementById("predictionList");
+    predictionList.innerHTML = "";
+
+    data.forEach(prediction => {
+        const cropText = prediction.crop ? `Crop: ${prediction.crop}` : "";
+        const fertText = prediction.fertilizer ? `Fertilizer: ${prediction.fertilizer}` : "";
+
+        if (cropText || fertText) {
+            const li = document.createElement("li");
+            li.textContent = `${cropText} ${fertText}`.trim();
+            predictionList.appendChild(li);
+        }
+    });
+}
+
+    </script>
+
+</body>
+</html>
